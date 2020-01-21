@@ -5,10 +5,9 @@ import NotFound from './src/404'
 const app = express()
 
 
-
-app.use('*',NotFound)
 app.use('/login',login)
 app.use('/reg',register)
+app.use('*',NotFound)
 app.listen(3000,function(){
     console.log('is runngin 3000')
 })
