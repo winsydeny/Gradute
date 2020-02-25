@@ -6,28 +6,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
-const mongo_1 = require("../db/mongo");
+const jwt_1 = __importDefault(require("../jwt"));
+const jwt = new jwt_1.default();
 const Route = express.Router();
-const sql = "select * from react.login";
-// body 请求参数类型为 x-www-form-urlencoded
+// body 请求参数类型为 x-www-form-urlencoded（不支持form-data）
 Route.post("/", (req, res) => {
     // console.log(req.body)
+    const token = jwt.generateToken();
     const { user, passcode } = req.body;
-    const userschema = new mongo_1.User({
-        uuid: 12313,
-        user: user,
-        pass: passcode
-    });
-    userschema.save((err, res) => {
-        if (err) {
-        }
-        else {
-        }
-    });
+    console.log(user, passcode);
+    if (user && passcode) {
+        res.send({ 'token': token, 'msg': 'login success' });
+        return false;
+    }
     res.send({
-        success: true
+        status: 0,
+        msg: 'user and passcode is must be required'
     });
 });
 exports.default = Route;

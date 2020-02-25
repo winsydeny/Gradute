@@ -6,10 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jwt_1 = __importDefault(require("../jwt"));
 const jwt = new jwt_1.default();
 exports.default = (req, res, next) => {
-    const { token } = req.query;
+    const token = req.query.token || req.body.token;
+    if (req.path === '/api/login') {
+        next();
+        return;
+    }
     try {
-        const result = jwt.verifyToken(token);
-        next(result);
+        jwt.verifyToken(token);
+        next();
     }
     catch (e) {
         res.send({

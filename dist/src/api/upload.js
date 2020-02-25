@@ -42,7 +42,6 @@ Route.get("/token", (req, res) => {
     // } catch (e) {
     //   res.send({ error: e });
     // }
-    console.log(result);
     res.send({
         success: true,
         message: "already verify"

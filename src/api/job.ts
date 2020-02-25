@@ -25,16 +25,17 @@ Route.get("/", (req: any, res: any) => {
 
 Route.post("/submit", (req: Request, res: any) => {
   const { uid, hr_id, email } = req.body;
-  res.send({
-    success: true,
-    data: [
-      {
-        uid: uid,
-        hr_id: hr_id,
-        email: email
-      }
-    ]
-  });
+  res.send({data:req.body})
+  // res.send({
+  //   success: true,
+  //   data: [
+  //     {
+  //       uid: uid,
+  //       hr_id: hr_id,
+  //       email: email
+  //     }
+  //   ]
+  // });
 });
 
 export default Route;
