@@ -27,6 +27,7 @@ Route.get("/", (req: Requset, res: any) => {
   const con = mysql.createConnection(config)
   // limit ' + start + ',20'
   // const sql: string =`select * from find_users limit ${start},${size}`;
+  // 通过关键词查找并且分页
   const sql: string =`select * from find_users where user like '%${req.query.keyword}%' limit ${start},${size}`;
   con.connect();
   con.query(sql,(err,data) => {
