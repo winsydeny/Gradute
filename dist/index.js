@@ -13,12 +13,16 @@ const job_1 = __importDefault(require("./src/api/job"));
 const upload_1 = __importDefault(require("./src/api/upload"));
 const _404_1 = __importDefault(require("./src/404"));
 const search_1 = __importDefault(require("./src/api/search"));
+const add_1 = __importDefault(require("./src/api/add"));
 /**
  *  Common Response
  * {
  *    status: Number,
  *    msg: String,
  * }
+ *
+ *  status:
+ *   0 =>  success,
  */
 const app = express_1.default();
 app.use(conole_1.default);
@@ -31,6 +35,7 @@ app.use("/api/register", register_1.default);
 app.use("/api/job", job_1.default);
 app.use("/api/upload", upload_1.default);
 app.use("/api/search", search_1.default);
+app.use("/api/add", add_1.default);
 app.use("*", _404_1.default);
 // connect mongo
 // Mongo().on("error", () => console.log("数据库启动失败"));

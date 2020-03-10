@@ -1,7 +1,7 @@
 import * as express from "express";
-import * as mysql from 'mysql';
-import Requset from '../d.ts/index';
-import config from "../db/mysql"
+import * as mysql from "mysql";
+import Requset from "../d.ts/index";
+import config from "../db/mysql";
 import { User } from "../db/mongo";
 import Jwt from "../jwt";
 const jwt = new Jwt();
@@ -20,29 +20,29 @@ const Route: any = express.Router();
  *  }
  */
 Route.get("/", (req: Requset, res: any) => {
-  const size = req.query.size || 10
-  const page = req.query.page || 1
-  const start = (page - 1) * size //start number
+  const size = req.query.size || 10;
+  const page = req.query.page || 1;
+  const start = (page - 1) * size; //start number
   // console.log(req.query)
-  const con = mysql.createConnection(config)
+  const con = mysql.createConnection(config);
   // limit ' + start + ',20'
   // const sql: string =`select * from find_users limit ${start},${size}`;
   // 通过关键词查找并且分页
-  const sql: string =`select * from find_users where user like '%${req.query.keyword}%' limit ${start},${size}`;
+  const sql: string = `select * from find_joblist where position like '%${req.query.keyword}%' limit ${start},${size}`;
   con.connect();
-  con.query(sql,(err,data) => {
-    if(err){
+  con.query(sql, (err, data) => {
+    if (err) {
       res.send({
-          status:10001,
-          msg:err
-      })
+        status: 10001,
+        msg: err
+      });
       return false;
     }
     res.send({
-        status:0,
-        msg:data
-    })
-  })
+      status: 0,
+      msg: data
+    });
+  });
   con.end();
 });
 

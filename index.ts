@@ -8,13 +8,17 @@ import register from "./src/api/register";
 import job from "./src/api/job";
 import upload from "./src/api/upload";
 import NotFound from "./src/404";
-import search from "./src/api/search"
+import search from "./src/api/search";
+import add from "./src/api/add";
 /**
- *  Common Response 
+ *  Common Response
  * {
  *    status: Number,
  *    msg: String,
  * }
+ *
+ *  status:
+ *   0 =>  success,
  */
 
 const app = express();
@@ -28,6 +32,7 @@ app.use("/api/register", register);
 app.use("/api/job", job);
 app.use("/api/upload", upload);
 app.use("/api/search", search);
+app.use("/api/add", add);
 app.use("*", NotFound);
 // connect mongo
 // Mongo().on("error", () => console.log("数据库启动失败"));
