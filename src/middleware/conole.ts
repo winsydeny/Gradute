@@ -9,8 +9,8 @@ export default (req: any, res: any, next: any) => {
   );
   next();
 };
-
-function dateFtt(fmt, date) {
+interface Obj {}
+function dateFtt(fmt: any, date: any) {
   //author: meizz
   var o = {
     "M+": date.getMonth() + 1, //月份

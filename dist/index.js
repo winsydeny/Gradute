@@ -2,41 +2,58 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const conole_1 = __importDefault(require("./src/middleware/conole"));
 const verify_1 = __importDefault(require("./src/middleware/verify"));
-const login_1 = __importDefault(require("./src/api/login"));
-const register_1 = __importDefault(require("./src/api/register"));
-const job_1 = __importDefault(require("./src/api/job"));
-const upload_1 = __importDefault(require("./src/api/upload"));
+// import register from "./src/api/register";
+// import job from "./src/api/job";
+// import upload from "./src/api/upload";
 const _404_1 = __importDefault(require("./src/404"));
-const search_1 = __importDefault(require("./src/api/search"));
-const add_1 = __importDefault(require("./src/api/add"));
+const ApiList = __importStar(require("./src/api"));
+console.log("App => ", ApiList);
+// for(let item in ApiList){
+//   app.use(`/api/${item}`,ApiList[item])
+// }
 /**
  *  Common Response
  * {
- *    status: Number,
+ *    status: Number, 0, 10009,20000,20001
  *    msg: String,
  * }
  *
  *  status:
  *   0 =>  success,
+ *   10009 => 无此用户或者账号密码错误
+ *   20000 =>
+ *   20001 =>
  */
+const List = ApiList;
 const app = express_1.default();
 app.use(conole_1.default);
 // body-parser 并不支持form-data格式
-app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
+app.use(body_parser_1.default.json());
 app.use(verify_1.default);
-app.use("/api/login", login_1.default);
-app.use("/api/register", register_1.default);
-app.use("/api/job", job_1.default);
-app.use("/api/upload", upload_1.default);
-app.use("/api/search", search_1.default);
-app.use("/api/add", add_1.default);
+for (let item in List) {
+    app.use(`/api/${item}`, List[item]);
+}
 app.use("*", _404_1.default);
+// app.use("/api/login", login);
+// app.use("/api/register", register);
+// app.use("/api/job", job);
+// app.use("/api/upload", upload);
+// app.use("/api/search", search);
+// app.use("/api/add", add);
+// app.use("/api/feedback", feedback);
 // connect mongo
 // Mongo().on("error", () => console.log("数据库启动失败"));
 // Mongo().once("open", () => {

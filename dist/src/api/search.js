@@ -50,7 +50,8 @@ Route.get("/", (req, res) => {
         }
         res.send({
             status: 0,
-            msg: data
+            msg: "ok",
+            data: data
         });
     });
     con.end();

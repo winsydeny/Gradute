@@ -40,7 +40,8 @@ Route.get("/", (req: Requset, res: any) => {
     }
     res.send({
       status: 0,
-      msg: data
+      msg: "ok",
+      data: data
     });
   });
   con.end();

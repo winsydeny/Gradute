@@ -7,9 +7,11 @@ const jwt_1 = __importDefault(require("../jwt"));
 const jwt = new jwt_1.default();
 exports.default = (req, res, next) => {
     const token = req.query.token || req.body.token;
-    if (req.path === '/api/login') {
+    if (req.path === "/api/login" ||
+        req.path === "/api/register/send" ||
+        req.path === "/api/register") {
         next();
-        return;
+        return false;
     }
     try {
         jwt.verifyToken(token);
@@ -17,8 +19,9 @@ exports.default = (req, res, next) => {
     }
     catch (e) {
         res.send({
+            status: -1,
             success: false,
-            message: "The Token is woring!",
+            message: "The Token is woring!!!",
             error: e
         });
     }
