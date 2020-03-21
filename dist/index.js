@@ -19,7 +19,6 @@ const verify_1 = __importDefault(require("./src/middleware/verify"));
 // import upload from "./src/api/upload";
 const _404_1 = __importDefault(require("./src/404"));
 const ApiList = __importStar(require("./src/api"));
-console.log("App => ", ApiList);
 // for(let item in ApiList){
 //   app.use(`/api/${item}`,ApiList[item])
 // }
@@ -37,6 +36,7 @@ console.log("App => ", ApiList);
  *   20001 =>
  */
 const List = ApiList;
+console.log("s");
 const app = express_1.default();
 app.use(conole_1.default);
 // body-parser 并不支持form-data格式

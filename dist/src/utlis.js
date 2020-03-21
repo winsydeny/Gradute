@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SendCommon = (res, status) => {
     res.send({
         status: status,
-        msg: "无此用户或者账号密码错误"
+        msg: " "
     });
 };
 exports._query = (mysql, sql) => {

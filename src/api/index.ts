@@ -5,4 +5,19 @@ import upload from "./upload";
 import search from "./search";
 import add from "./add";
 import feedback from "./feedback";
-export { login, register, job, upload, search, add, feedback };
+import apply from "./apply";
+import forum from "./forum";
+import resume from "./resume";
+
+export {
+  login,
+  register,
+  job,
+  upload,
+  search,
+  add,
+  feedback,
+  apply,
+  forum,
+  resume
+};

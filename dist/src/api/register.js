@@ -24,6 +24,7 @@ const mysql = __importStar(require("mysql"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const mysql_1 = __importDefault(require("../db/mysql"));
 const uuid_1 = require("uuid");
+const utlis_1 = require("../utlis");
 const Route = express.Router();
 const transporter = nodemailer_1.default.createTransport({
     host: "smtp.qq.com",
@@ -60,8 +61,8 @@ function sendEmail(client, code) {
     });
 }
 function addUser(item) {
-    const { uid, user, email, user_info, identity } = item;
-    return `insert into find_users (uid,user,email,user_info,identity) values ('${uid}','${user}','${email}','${user_info}','${identity}')`;
+    const { uid, user, email, user_info, identity, passcode } = item;
+    return `insert into find_users (uid,user,email,user_info,identity,passcode) values ('${uid}','${user}','${email}','${user_info}','${identity}','${passcode}')`;
 }
 Route.post("/send", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // console.log("this is send", req.body);
@@ -74,6 +75,7 @@ Route.post("/send", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     con.query(sql, (err, data) => {
         if (err) {
             console.log("database fail");
+            return false;
         }
         if (data.affectedRows === 0) {
             res.send({
@@ -100,8 +102,25 @@ Route.post("/send", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         con.end(); //close mysql connect
     });
 }));
+Route.post("/personal", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, cellphone, email } = req.body;
+    const con = mysql.createConnection(mysql_1.default);
+    const sql = `update find_users set user='${name}',cellphone='${cellphone}' where email='${email}'`;
+    const result = yield utlis_1._query(con, sql);
+    if (result.affectedRows === 1) {
+        res.send({
+            status: 0,
+            msg: "ok"
+        });
+        return false;
+    }
+    res.send({
+        status: -1,
+        msg: "fail"
+    });
+}));
 Route.post("/", (req, res) => {
-    const { code, email } = req.body;
+    const { code, email, passcode } = req.body;
     const con = mysql.createConnection(mysql_1.default);
     const sql = `select * from find_register where code=${code} and email='${email}'`;
     const uuid = uuid_1.v1();
@@ -110,11 +129,13 @@ Route.post("/", (req, res) => {
         user: "hhhhh",
         email: email,
         user_info: 1,
-        identity: ""
+        identity: "",
+        passcode: passcode
     };
     con.query(sql, (err, result) => {
         if (err) {
             console.log(err);
+            return false;
         }
         if (result.length <= 0) {
             res.send({
@@ -126,6 +147,7 @@ Route.post("/", (req, res) => {
         con.query(addUser(user), (e, r) => {
             if (e) {
                 console.log("err,add new user");
+                return false;
             }
         });
         res.send({

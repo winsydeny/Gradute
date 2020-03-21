@@ -18,8 +18,8 @@ Route.get("/", (req, res) => {
     const rs = req.body;
     console.log(rs);
     res.send({
-        success: true,
-        token: jwt.generateToken()
+        success: true
+        // token: jwt.generateToken()
     });
 });
 Route.post("/test", (req, res) => {

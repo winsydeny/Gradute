@@ -1,7 +1,7 @@
 export const SendCommon = (res: any, status: number) => {
   res.send({
     status: status,
-    msg: "无此用户或者账号密码错误"
+    msg: " "
   });
 };
 export const _query = (mysql: any, sql: string) => {

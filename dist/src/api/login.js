@@ -22,7 +22,7 @@ Route.post("/", (req, res) => {
     const { email, passcode } = req.body;
     const token = jwt.generateToken(email);
     const con = mysql.createConnection(mysql_1.default);
-    const sql = `select email,passcode from find_users where email='${email}' and passcode='${passcode}'`;
+    const sql = `select email,user from find_users where email='${email}' and passcode='${passcode}'`;
     con.query(sql, (err, data) => {
         // console.log(data);
         if (err) {
@@ -30,7 +30,12 @@ Route.post("/", (req, res) => {
             return false;
         }
         if (data.length === 1) {
-            res.send({ status: 0, access_token: token, msg: "login success" });
+            res.send({
+                status: 0,
+                access_token: token,
+                msg: "login success",
+                data: data
+            });
             return false;
         }
         res.send({

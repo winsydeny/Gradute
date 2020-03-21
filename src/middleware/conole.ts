@@ -12,7 +12,7 @@ export default (req: any, res: any, next: any) => {
 interface Obj {}
 function dateFtt(fmt: any, date: any) {
   //author: meizz
-  var o = {
+  var o: any = {
     "M+": date.getMonth() + 1, //月份
     "d+": date.getDate(), //日
     "h+": date.getHours(), //小时

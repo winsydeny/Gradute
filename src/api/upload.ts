@@ -7,8 +7,8 @@ Route.get("/", (req: any, res: any) => {
   const rs = req.body;
   console.log(rs);
   res.send({
-    success: true,
-    token: jwt.generateToken()
+    success: true
+    // token: jwt.generateToken()
   });
 });
 Route.post("/test", (req: any, res: any) => {
@@ -43,4 +43,5 @@ Route.get("/token", (req: any, res: any) => {
   //   rs:rs
   // })
 });
+
 export default Route;

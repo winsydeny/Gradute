@@ -9,7 +9,8 @@ exports.default = (req, res, next) => {
     const token = req.query.token || req.body.token;
     if (req.path === "/api/login" ||
         req.path === "/api/register/send" ||
-        req.path === "/api/register") {
+        req.path === "/api/register" ||
+        req.path === "/api/register/personal") {
         next();
         return false;
     }

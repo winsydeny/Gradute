@@ -5,7 +5,8 @@ export default (req: any, res: any, next: any) => {
   if (
     req.path === "/api/login" ||
     req.path === "/api/register/send" ||
-    req.path === "/api/register"
+    req.path === "/api/register" ||
+    req.path === "/api/register/personal"
   ) {
     next();
     return false;

@@ -3,6 +3,7 @@ import * as mysql from "mysql";
 import nodeMailer from "nodemailer";
 import config from "../db/mysql";
 import { v1 as uuidv1 } from "uuid";
+import { _query } from "../utlis";
 const Route = express.Router();
 interface User {
   uid: string;
@@ -10,7 +11,9 @@ interface User {
   email: string;
   user_info: Number;
   identity: string;
+  passcode: string;
 }
+
 const transporter = nodeMailer.createTransport({
   host: "smtp.qq.com",
   port: 465,
@@ -46,8 +49,8 @@ function sendEmail(client: string, code: Number) {
   });
 }
 function addUser(item: User) {
-  const { uid, user, email, user_info, identity } = item;
-  return `insert into find_users (uid,user,email,user_info,identity) values ('${uid}','${user}','${email}','${user_info}','${identity}')`;
+  const { uid, user, email, user_info, identity, passcode } = item;
+  return `insert into find_users (uid,user,email,user_info,identity,passcode) values ('${uid}','${user}','${email}','${user_info}','${identity}','${passcode}')`;
 }
 Route.post("/send", async (req: any, res: any) => {
   // console.log("this is send", req.body);
@@ -60,6 +63,7 @@ Route.post("/send", async (req: any, res: any) => {
   con.query(sql, (err, data) => {
     if (err) {
       console.log("database fail");
+      return false;
     }
     if (data.affectedRows === 0) {
       res.send({
@@ -86,8 +90,25 @@ Route.post("/send", async (req: any, res: any) => {
     con.end(); //close mysql connect
   });
 });
+Route.post("/personal", async (req: any, res: any) => {
+  const { name, cellphone, email } = req.body;
+  const con = mysql.createConnection(config);
+  const sql = `update find_users set user='${name}',cellphone='${cellphone}' where email='${email}'`;
+  const result: any = await _query(con, sql);
+  if (result.affectedRows === 1) {
+    res.send({
+      status: 0,
+      msg: "ok"
+    });
+    return false;
+  }
+  res.send({
+    status: -1,
+    msg: "fail"
+  });
+});
 Route.post("/", (req: any, res: any) => {
-  const { code, email } = req.body;
+  const { code, email, passcode } = req.body;
   const con = mysql.createConnection(config);
   const sql = `select * from find_register where code=${code} and email='${email}'`;
   const uuid = uuidv1();
@@ -96,11 +117,13 @@ Route.post("/", (req: any, res: any) => {
     user: "hhhhh",
     email: email,
     user_info: 1,
-    identity: ""
+    identity: "",
+    passcode: passcode
   };
   con.query(sql, (err, result) => {
     if (err) {
       console.log(err);
+      return false;
     }
     if (result.length <= 0) {
       res.send({
@@ -112,6 +135,7 @@ Route.post("/", (req: any, res: any) => {
     con.query(addUser(user), (e, r) => {
       if (e) {
         console.log("err,add new user");
+        return false;
       }
     });
     res.send({

@@ -13,7 +13,6 @@ import NotFound from "./src/404";
 // import feedback from "./src/api/feedback";
 import { login, register, job, upload, search, add, feedback } from "./src/api";
 import * as ApiList from "./src/api";
-console.log("App => ", ApiList);
 
 // for(let item in ApiList){
 //   app.use(`/api/${item}`,ApiList[item])
@@ -32,6 +31,7 @@ console.log("App => ", ApiList);
  *   20001 =>
  */
 const List: any = ApiList;
+console.log("s");
 const app = express();
 app.use(Console);
 // body-parser 并不支持form-data格式
