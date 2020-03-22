@@ -51,7 +51,8 @@ Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, fu
     //   const USERINFO: any = jwt.verifyToken(token);
     //   sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
     // } else {
-    const token = req.body.token;
+    const token = req.query.token;
+    console.log("upload => avatar", token);
     const USERINFO = jwt.verifyToken(token);
     const sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
     // }
@@ -75,6 +76,7 @@ Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, fu
 Route.post("/attach", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.get("access");
     console.log("access_token", token);
+    console.log("req.files", req.files);
     const USERINFO = jwt.verifyToken(token);
     const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
     const con = mysql.createConnection(mysql_1.default);

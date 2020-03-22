@@ -33,7 +33,8 @@ Route.post("/", upload.any(), async (req: any, res: any) => {
   //   const USERINFO: any = jwt.verifyToken(token);
   //   sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
   // } else {
-  const token = req.body.token;
+  const token = req.query.token;
+  console.log("upload => avatar", token);
   const USERINFO: any = jwt.verifyToken(token);
   const sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
   // }
@@ -56,6 +57,7 @@ Route.post("/", upload.any(), async (req: any, res: any) => {
 Route.post("/attach", upload.any(), async (req: any, res: any) => {
   const token = req.get("access");
   console.log("access_token", token);
+  console.log("req.files", req.files);
   const USERINFO: any = jwt.verifyToken(token);
   const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
   const con = mysql.createConnection(config);
