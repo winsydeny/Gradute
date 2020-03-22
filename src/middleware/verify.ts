@@ -3,7 +3,6 @@ const jwt = new Jwt();
 export default (req: any, res: any, next: any) => {
   // 改为header 传输
   const token = req.query.token || req.body.token;
-  console.log(req.get("access_token"));
   if (
     req.path === "/api/login" ||
     req.path === "/api/register/send" ||

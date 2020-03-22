@@ -54,7 +54,8 @@ Route.post("/", upload.any(), async (req: any, res: any) => {
 });
 //upload resume
 Route.post("/attach", upload.any(), async (req: any, res: any) => {
-  const token = req.get("access_token");
+  const token = req.get("access");
+  console.log("access_token", token);
   const USERINFO: any = jwt.verifyToken(token);
   const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
   const con = mysql.createConnection(config);
