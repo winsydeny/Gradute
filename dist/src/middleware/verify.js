@@ -8,11 +8,12 @@ const jwt = new jwt_1.default();
 exports.default = (req, res, next) => {
     // 改为header 传输
     const token = req.query.token || req.body.token;
+    console.log(req.get("access_token"));
     if (req.path === "/api/login" ||
         req.path === "/api/register/send" ||
         req.path === "/api/register" ||
         req.path === "/api/register/personal" ||
-        req.get("access_token") !== undefined) {
+        req.path === "/api/upload/attach") {
         next();
         return false;
     }
