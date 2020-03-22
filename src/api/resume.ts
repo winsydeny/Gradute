@@ -103,7 +103,7 @@ Route.get("/attach", async (req: any, res: any) => {
   const { token } = req.query;
   const jwt = new JWT();
   const info: any = jwt.verifyToken(token);
-  const url = `http://localhost:3000/file?token=${token}`;
+  const url = `https://www.vanlansh/api/files?token=${token}`;
   try {
     await sendEmail(info.email, url);
     res.send({

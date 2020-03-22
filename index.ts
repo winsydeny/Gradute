@@ -41,11 +41,11 @@ app.use(verify);
 for (let item in List) {
   app.use(`/api/${item}`, List[item]);
 }
-app.get("/files", (req: any, res: any) => {
-  console.log(req.query);
-  var form = fs.readFileSync("./form.html", { encoding: "utf8" });
-  res.send(form);
-});
+// app.get("/files", (req: any, res: any) => {
+//   console.log(req.query);
+//   var form = fs.readFileSync("./form.html", { encoding: "utf8" });
+//   res.send(form);
+// });
 app.use("*", NotFound);
 // app.use("/api/login", login);
 // app.use("/api/register", register);

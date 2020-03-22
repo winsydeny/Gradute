@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as mysql from "mysql";
 import multer from "multer";
+import fs from "fs";
 import crypto from "crypto";
 import Jwt from "../jwt";
 import config from "../db/mysql";
@@ -53,21 +54,14 @@ Route.post("/", upload.any(), async (req: any, res: any) => {
   }
 });
 
-Route.get("/token", (req: any, res: any) => {
-  // console.log("=> /api/upload/token");
-  // const { token } = req.query;
-  // try {
-  //   const rs = jwt.verifyToken(token);
-  //   res.send({
-  //     result: rs
-  //   });
-  // } catch (e) {
-  //   res.send({ error: e });
-  // }
-  res.send({
-    success: true,
-    message: "already verify"
-  });
+Route.get("/files", (req: any, res: any) => {
+  console.log(req.query);
+  var form = fs.readFileSync("./form.html", { encoding: "utf8" });
+  res.send(form);
+  // res.send({
+  //   success: true,
+  //   message: "already verify"
+  // });
   // const {token} = req.query
   // cosnt rs = jwt.verifyToken(token)
   // res.send({

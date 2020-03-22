@@ -23,7 +23,6 @@ const _404_1 = __importDefault(require("./src/404"));
 // import feedback from "./src/api/feedback";
 // import { login, register, job, upload, search, add, feedback } from "./src/api";
 const ApiList = __importStar(require("./src/api"));
-const fs = __importStar(require("fs"));
 // for(let item in ApiList){
 //   app.use(`/api/${item}`,ApiList[item])
 // }
@@ -51,11 +50,11 @@ app.use(verify_1.default);
 for (let item in List) {
     app.use(`/api/${item}`, List[item]);
 }
-app.get("/files", (req, res) => {
-    console.log(req.query);
-    var form = fs.readFileSync("./form.html", { encoding: "utf8" });
-    res.send(form);
-});
+// app.get("/files", (req: any, res: any) => {
+//   console.log(req.query);
+//   var form = fs.readFileSync("./form.html", { encoding: "utf8" });
+//   res.send(form);
+// });
 app.use("*", _404_1.default);
 // app.use("/api/login", login);
 // app.use("/api/register", register);

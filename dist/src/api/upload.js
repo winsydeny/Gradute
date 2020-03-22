@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
 const mysql = __importStar(require("mysql"));
 const multer_1 = __importDefault(require("multer"));
+const fs_1 = __importDefault(require("fs"));
 const crypto_1 = __importDefault(require("crypto"));
 const jwt_1 = __importDefault(require("../jwt"));
 const mysql_1 = __importDefault(require("../db/mysql"));
@@ -73,21 +74,14 @@ Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, fu
         });
     }
 }));
-Route.get("/token", (req, res) => {
-    // console.log("=> /api/upload/token");
-    // const { token } = req.query;
-    // try {
-    //   const rs = jwt.verifyToken(token);
-    //   res.send({
-    //     result: rs
-    //   });
-    // } catch (e) {
-    //   res.send({ error: e });
-    // }
-    res.send({
-        success: true,
-        message: "already verify"
-    });
+Route.get("/files", (req, res) => {
+    console.log(req.query);
+    var form = fs_1.default.readFileSync("./form.html", { encoding: "utf8" });
+    res.send(form);
+    // res.send({
+    //   success: true,
+    //   message: "already verify"
+    // });
     // const {token} = req.query
     // cosnt rs = jwt.verifyToken(token)
     // res.send({
