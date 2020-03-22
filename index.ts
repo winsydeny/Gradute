@@ -37,7 +37,7 @@ app.use(Console);
 // body-parser 并不支持form-data格式
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// app.use(verify);
+app.use(verify);
 for (let item in List) {
   app.use(`/api/${item}`, List[item]);
 }

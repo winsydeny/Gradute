@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const conole_1 = __importDefault(require("./src/middleware/conole"));
+const verify_1 = __importDefault(require("./src/middleware/verify"));
 // import register from "./src/api/register";
 // import job from "./src/api/job";
 // import upload from "./src/api/upload";
@@ -46,7 +47,7 @@ app.use(conole_1.default);
 // body-parser 并不支持form-data格式
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
-// app.use(verify);
+app.use(verify_1.default);
 for (let item in List) {
     app.use(`/api/${item}`, List[item]);
 }
