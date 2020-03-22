@@ -1,6 +1,7 @@
 import Jwt from "../jwt";
 const jwt = new Jwt();
 export default (req: any, res: any, next: any) => {
+  // 改为header 传输
   const token = req.query.token || req.body.token;
   if (
     req.path === "/api/login" ||

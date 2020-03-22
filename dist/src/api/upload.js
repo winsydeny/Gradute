@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -11,26 +20,59 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
+const mysql = __importStar(require("mysql"));
+const multer_1 = __importDefault(require("multer"));
+const crypto_1 = __importDefault(require("crypto"));
 const jwt_1 = __importDefault(require("../jwt"));
+const mysql_1 = __importDefault(require("../db/mysql"));
+const utlis_1 = require("../utlis");
 const Route = express.Router();
 const jwt = new jwt_1.default();
-Route.get("/", (req, res) => {
-    const rs = req.body;
-    console.log(rs);
-    res.send({
-        success: true
-        // token: jwt.generateToken()
-    });
+// control file store
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./tmp");
+    },
+    filename: (req, file, cb) => {
+        const filename = crypto_1.default.createHash("md5");
+        filename.update(new Date().getTime().toString(), "utf8");
+        console.log("multer", file);
+        let type = file.originalname.split(".");
+        cb(null, `${filename.digest("hex")}.${type[type.length - 1]}`);
+    }
 });
-Route.post("/test", (req, res) => {
+const upload = multer_1.default({ storage: storage });
+Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // console.log("=> /api/upload/test");
-    const { token } = req.body;
-    const rs = jwt.verifyToken(token);
-    res.send({
-        success: true,
-        rs: rs
-    });
-});
+    console.log("upload => ", req);
+    let token = "";
+    let sql = "";
+    if (req.get("access_token") !== undefined) {
+        token = req.get("access_token");
+        const USERINFO = jwt.verifyToken(token);
+        sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+    }
+    else {
+        token = req.body.token;
+        const USERINFO = jwt.verifyToken(token);
+        sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
+    }
+    const con = mysql.createConnection(mysql_1.default);
+    try {
+        const rs = yield utlis_1._query(con, sql);
+        res.send({
+            status: 0,
+            msg: "upload success",
+            url: req.files[0].path
+        });
+    }
+    catch (e) {
+        res.send({
+            status: -1,
+            msg: "fail"
+        });
+    }
+}));
 Route.get("/token", (req, res) => {
     // console.log("=> /api/upload/token");
     // const { token } = req.query;

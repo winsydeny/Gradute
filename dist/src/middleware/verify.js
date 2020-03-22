@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jwt_1 = __importDefault(require("../jwt"));
 const jwt = new jwt_1.default();
 exports.default = (req, res, next) => {
+    // 改为header 传输
     const token = req.query.token || req.body.token;
     if (req.path === "/api/login" ||
         req.path === "/api/register/send" ||

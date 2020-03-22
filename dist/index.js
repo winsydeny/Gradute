@@ -13,12 +13,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const conole_1 = __importDefault(require("./src/middleware/conole"));
-const verify_1 = __importDefault(require("./src/middleware/verify"));
 // import register from "./src/api/register";
 // import job from "./src/api/job";
 // import upload from "./src/api/upload";
 const _404_1 = __importDefault(require("./src/404"));
+// import search from "./src/api/search";
+// import add from "./src/api/add";
+// import feedback from "./src/api/feedback";
+// import { login, register, job, upload, search, add, feedback } from "./src/api";
 const ApiList = __importStar(require("./src/api"));
+const fs = __importStar(require("fs"));
 // for(let item in ApiList){
 //   app.use(`/api/${item}`,ApiList[item])
 // }
@@ -42,10 +46,15 @@ app.use(conole_1.default);
 // body-parser 并不支持form-data格式
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
-app.use(verify_1.default);
+// app.use(verify);
 for (let item in List) {
     app.use(`/api/${item}`, List[item]);
 }
+app.get("/files", (req, res) => {
+    console.log(req.query);
+    var form = fs.readFileSync("./form.html", { encoding: "utf8" });
+    res.send(form);
+});
 app.use("*", _404_1.default);
 // app.use("/api/login", login);
 // app.use("/api/register", register);

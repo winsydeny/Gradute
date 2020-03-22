@@ -11,9 +11,9 @@ import NotFound from "./src/404";
 // import search from "./src/api/search";
 // import add from "./src/api/add";
 // import feedback from "./src/api/feedback";
-import { login, register, job, upload, search, add, feedback } from "./src/api";
+// import { login, register, job, upload, search, add, feedback } from "./src/api";
 import * as ApiList from "./src/api";
-
+import * as fs from "fs";
 // for(let item in ApiList){
 //   app.use(`/api/${item}`,ApiList[item])
 // }
@@ -37,10 +37,15 @@ app.use(Console);
 // body-parser 并不支持form-data格式
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(verify);
+// app.use(verify);
 for (let item in List) {
   app.use(`/api/${item}`, List[item]);
 }
+app.get("/files", (req: any, res: any) => {
+  console.log(req.query);
+  var form = fs.readFileSync("./form.html", { encoding: "utf8" });
+  res.send(form);
+});
 app.use("*", NotFound);
 // app.use("/api/login", login);
 // app.use("/api/register", register);
