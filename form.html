@@ -9,8 +9,8 @@
 
 <body style="height: 100vh;background: skyblue;display: flex;justify-content: center;align-items: center;">
     <div id="app">
-        <el-upload class="upload-demo" :headers="header" drag action="api/upload" :on-preview="handlePreview"
-            :on-remove="handleRemove" :file-list="fileList" drag="true">
+        <el-upload class="upload-demo" :headers="header" drag action="http://localhost:3000/api/upload/"
+            :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" drag="true">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
             <!-- <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div> -->

@@ -11,7 +11,8 @@ exports.default = (req, res, next) => {
     if (req.path === "/api/login" ||
         req.path === "/api/register/send" ||
         req.path === "/api/register" ||
-        req.path === "/api/register/personal") {
+        req.path === "/api/register/personal" ||
+        req.get("access_token") !== undefined) {
         next();
         return false;
     }
