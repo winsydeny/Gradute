@@ -31,7 +31,6 @@ import * as fs from "fs";
  *   20001 =>
  */
 const List: any = ApiList;
-console.log("s");
 const app = express();
 app.use(Console);
 // body-parser 并不支持form-data格式

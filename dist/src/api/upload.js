@@ -32,35 +32,32 @@ const jwt = new jwt_1.default();
 // control file store
 const storage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./tmp");
+        cb(null, "./upload");
     },
     filename: (req, file, cb) => {
         const filename = crypto_1.default.createHash("md5");
         filename.update(new Date().getTime().toString(), "utf8");
-        console.log("multer", file);
         let type = file.originalname.split(".");
         cb(null, `${filename.digest("hex")}.${type[type.length - 1]}`);
     }
 });
 const upload = multer_1.default({ storage: storage });
+// upload avatar
 Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // console.log("=> /api/upload/test");
-    console.log("upload => ", req);
-    let token = "";
-    let sql = "";
-    if (req.get("access_token") !== undefined) {
-        token = req.get("access_token");
-        const USERINFO = jwt.verifyToken(token);
-        sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
-    }
-    else {
-        token = req.body.token;
-        const USERINFO = jwt.verifyToken(token);
-        sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
-    }
+    console.log(req.get("access_token"));
+    // if (req.get("access_token") !== undefined) {
+    //   token = req.get("access_token");
+    //   const USERINFO: any = jwt.verifyToken(token);
+    //   sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+    // } else {
+    const token = req.body.token;
+    const USERINFO = jwt.verifyToken(token);
+    const sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
+    // }
     const con = mysql.createConnection(mysql_1.default);
     try {
-        const rs = yield utlis_1._query(con, sql);
+        // const rs = await _query(con, sql);
         res.send({
             status: 0,
             msg: "upload success",
@@ -74,6 +71,29 @@ Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, fu
         });
     }
 }));
+//upload resume
+Route.post("/attach", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.get("access_token");
+    const USERINFO = jwt.verifyToken(token);
+    const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+    const con = mysql.createConnection(mysql_1.default);
+    console.log("attach => ", USERINFO);
+    try {
+        const rs = yield utlis_1._query(con, sql);
+        res.send({
+            status: 0,
+            msg: "resume upload success",
+            url: req.files[0].path
+        });
+    }
+    catch (e) {
+        res.send({
+            status: -1,
+            msg: "fail"
+        });
+    }
+}));
+// upload page
 Route.get("/files", (req, res) => {
     console.log(req.query);
     var form = fs_1.default.readFileSync("./form.html", { encoding: "utf8" });

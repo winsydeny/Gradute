@@ -12,35 +12,34 @@ const jwt = new Jwt();
 // control file store
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./tmp");
+    cb(null, "./upload");
   },
   filename: (req, file, cb) => {
     const filename = crypto.createHash("md5");
     filename.update(new Date().getTime().toString(), "utf8");
-    console.log("multer", file);
     let type = file.originalname.split(".");
     cb(null, `${filename.digest("hex")}.${type[type.length - 1]}`);
   }
 });
 
 const upload = multer({ storage: storage });
+// upload avatar
 Route.post("/", upload.any(), async (req: any, res: any) => {
   // console.log("=> /api/upload/test");
-  console.log("upload => ", req);
-  let token = "";
-  let sql = "";
-  if (req.get("access_token") !== undefined) {
-    token = req.get("access_token");
-    const USERINFO: any = jwt.verifyToken(token);
-    sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
-  } else {
-    token = req.body.token;
-    const USERINFO: any = jwt.verifyToken(token);
-    sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
-  }
+
+  console.log(req.get("access_token"));
+  // if (req.get("access_token") !== undefined) {
+  //   token = req.get("access_token");
+  //   const USERINFO: any = jwt.verifyToken(token);
+  //   sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+  // } else {
+  const token = req.body.token;
+  const USERINFO: any = jwt.verifyToken(token);
+  const sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
+  // }
   const con = mysql.createConnection(config);
   try {
-    const rs = await _query(con, sql);
+    // const rs = await _query(con, sql);
     res.send({
       status: 0,
       msg: "upload success",
@@ -53,7 +52,28 @@ Route.post("/", upload.any(), async (req: any, res: any) => {
     });
   }
 });
-
+//upload resume
+Route.post("/attach", upload.any(), async (req: any, res: any) => {
+  const token = req.get("access_token");
+  const USERINFO: any = jwt.verifyToken(token);
+  const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+  const con = mysql.createConnection(config);
+  console.log("attach => ", USERINFO);
+  try {
+    const rs = await _query(con, sql);
+    res.send({
+      status: 0,
+      msg: "resume upload success",
+      url: req.files[0].path
+    });
+  } catch (e) {
+    res.send({
+      status: -1,
+      msg: "fail"
+    });
+  }
+});
+// upload page
 Route.get("/files", (req: any, res: any) => {
   console.log(req.query);
   var form = fs.readFileSync("./form.html", { encoding: "utf8" });
