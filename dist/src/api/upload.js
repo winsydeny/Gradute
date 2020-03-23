@@ -74,15 +74,20 @@ Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, fu
 }));
 //upload resume
 Route.post("/attach", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.get("access");
+    const token = req.query.token;
     console.log("access_token", token);
     console.log("req.files", req.files);
-    const USERINFO = jwt.verifyToken(token);
-    const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
-    const con = mysql.createConnection(mysql_1.default);
-    console.log("attach => ", USERINFO);
+    // if (req.files.length > 0) {
+    //   res.send("<h1>Upload success</h1>");
+    // } else {
+    //   res.send("Fail");
+    // }
     try {
-        const rs = yield utlis_1._query(con, sql);
+        const USERINFO = jwt.verifyToken(token);
+        const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+        const con = mysql.createConnection(mysql_1.default);
+        console.log("attach => ", USERINFO);
+        yield utlis_1._query(con, sql);
         res.send({
             status: 0,
             msg: "resume upload success",
