@@ -12,7 +12,7 @@ const jwt = new Jwt();
 // control file store
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./upload");
+    cb(null, "/var/www/html/winsydeny.github.io/upload");
   },
   filename: (req, file, cb) => {
     const filename = crypto.createHash("md5");
@@ -36,7 +36,7 @@ Route.post("/", upload.any(), async (req: any, res: any) => {
   const token = req.query.token;
   console.log("upload => avatar", token);
   const USERINFO: any = jwt.verifyToken(token);
-  const sql = `update find_users set avatar='${req.files[0].path}' where email='${USERINFO.email}'`;
+  const sql = `update find_users set avatar='/upload/${req.files[0].filename}' where email='${USERINFO.email}'`;
   // }
   const con = mysql.createConnection(config);
   try {
@@ -65,7 +65,7 @@ Route.post("/attach", upload.any(), async (req: any, res: any) => {
   // }
   try {
     const USERINFO: any = jwt.verifyToken(token);
-    const sql = `update find_user_info set online_resume='${req.files[0].path}' where email='${USERINFO.email}'`;
+    const sql = `update find_user_info set online_resume='${req.files[0].filename}' where email='${USERINFO.email}'`;
     const con = mysql.createConnection(config);
     console.log("attach => ", USERINFO);
     await _query(con, sql);
