@@ -8,7 +8,7 @@ import feedback from "./feedback";
 import apply from "./apply";
 import forum from "./forum";
 import resume from "./resume";
-
+import mine from "./mine";
 export {
   login,
   register,
@@ -19,5 +19,6 @@ export {
   feedback,
   apply,
   forum,
-  resume
+  resume,
+  mine
 };

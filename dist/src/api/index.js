@@ -23,3 +23,5 @@ const forum_1 = __importDefault(require("./forum"));
 exports.forum = forum_1.default;
 const resume_1 = __importDefault(require("./resume"));
 exports.resume = resume_1.default;
+const mine_1 = __importDefault(require("./mine"));
+exports.mine = mine_1.default;

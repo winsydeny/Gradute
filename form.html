@@ -15,7 +15,18 @@
     .btn {
       line-height: 20px;
       outline: none;
-      color: 'red'
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form input {
+      outline: none;
+      font-size: 18px;
+      /* height: 30px;
+      background: red; */
     }
   </style>
 </head>
@@ -25,14 +36,17 @@
     <form action="https://www.vanlansh.wang/api/upload/attach" method="post" enctype="multipart/form-data">
       <h2>简历上传</h2>
       <input class="btn" type="file" name="logo">
-      <input type="submit" value="提交">
+      <input class="btn" type="submit" value="点击上传">
     </form>
   </div>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- <lottie-player src="https://assets5.lottiefiles.com/datafiles/m4ER8LPQYNzRwyO/data.json" background="transparent"
+    speed="1" style="width: 300px; height: 300px;" loop controls autoplay>
+  </lottie-player> -->
   <script>
     const t = window.location.href.split("?")[1].split("=")[1]
     const f = document.querySelector('form');
     f.action += '?token=' + t;
-    console.log(f.action)
   </script>
 </body>
 

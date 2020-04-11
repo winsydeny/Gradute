@@ -24,10 +24,12 @@ const mysql = __importStar(require("mysql"));
 const Route = express.Router();
 const mysql_1 = __importDefault(require("../db/mysql"));
 const utlis_1 = require("../utlis");
+const uuid_1 = require("uuid");
 Route.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, user, uuid } = req.body;
+    const { email, user, uuid, position } = req.body;
+    const aid = uuid_1.v1();
     const con = mysql.createConnection(mysql_1.default);
-    const sql = `insert into find_apply_job (email,user,job_uuid,created) select '${email}','${user}','${uuid}','${new Date().getTime()}' from DUAL where not exists (select job_uuid from find_apply_job where job_uuid='${uuid}')`;
+    const sql = `insert into find_apply_job (email,user,job_uuid,created,position,aid) select '${email}','${user}','${uuid}','${new Date().getTime()}','${position}','${aid}' from DUAL where not exists (select job_uuid from find_apply_job where job_uuid='${uuid}')`;
     // const sql = `insert into find_apply_job (email,user,job_uuid,created) values ('${email}','${user}','${uuid}','${new Date().getTime()}')`;
     try {
         const result = yield utlis_1._query(con, sql);
@@ -49,18 +51,64 @@ Route.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // res.send("sd");
 }));
-Route.post("/submit", (req, res) => {
-    const { uid, hr_id, email } = req.body;
-    res.send({ data: req.body });
-    // res.send({
-    //   success: true,
-    //   data: [
-    //     {
-    //       uid: uid,
-    //       hr_id: hr_id,
-    //       email: email
-    //     }
-    //   ]
-    // });
-});
+Route.get("/agent", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const con = mysql.createConnection(mysql_1.default);
+    const sql = "select * from find_apply_job where apply=0";
+    try {
+        const rs = yield utlis_1._query(con, sql);
+        res.send({
+            status: 0,
+            msg: "ok",
+            data: rs
+        });
+    }
+    catch (e) {
+        console.log(e);
+    }
+}));
+Route.get("/record", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //token 解析 后获取email查询
+    console.log(req.query);
+    const con = mysql.createConnection(mysql_1.default);
+    const sql = `select * from find_apply_job where status=${req.query.status} and apply=${req.query.apply}`;
+    try {
+        const rs = yield utlis_1._query(con, sql);
+        res.send({
+            status: 0,
+            msg: "ok",
+            data: rs
+        });
+    }
+    catch (e) {
+        console.log(e);
+    }
+}));
+Route.post("/invite", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { location, datetime, job_uuid } = req.body;
+    const con = mysql.createConnection(mysql_1.default);
+    const vid = uuid_1.v1();
+    // console.log(job_uuid);
+    const sql = `update find_apply_job set location='${location}',time='${datetime}',vid='${vid}',apply=1 where job_uuid='${job_uuid}'`;
+    // const sql = `insert into find_apply_job (location,time,vid,apply) values ('${location}','${datetime}','${vid}',1)`;
+    // const sql = `insert into find_apply_job (location,time,vid,apply) select '${location}','${datetime}','${vid}',1 from DUAL where exists (select job_uuid from find_apply_job where job_uuid='${job_uuid}')`;
+    console.log(sql);
+    try {
+        const result = yield utlis_1._query(con, sql);
+        console.log(result);
+        if (result.affectedRows === 0) {
+            res.send({
+                status: 10004,
+                msg: "can not apply again"
+            });
+            return false;
+        }
+        res.send({
+            status: 0,
+            msg: "invite success"
+        });
+    }
+    catch (e) {
+        console.log(e);
+    }
+}));
 exports.default = Route;

@@ -28,7 +28,7 @@ Route.post("/", (req: Requset, res: any) => {
   const uuid = uuidv1();
   const created = new Date().getTime();
   const con = mysql.createConnection(config);
-  const sql = `insert into find_joblist (uuid,position,company,location,type,preview,created,salary,description,experience) values ('${uuid}','${position}','${company}','${location}','${type}','${preview}',${created},${salary},'${description}',${experience})`;
+  const sql = `insert into find_joblist (uuid,position,company,location,type,preview,created,salary,description,experience) values ('${uuid}','${position}','${company}','${location}','${type}','${preview}','${created}','${salary}','${description}','${experience}')`;
   con.query(sql, (err, data) => {
     if (err) {
       res.send({

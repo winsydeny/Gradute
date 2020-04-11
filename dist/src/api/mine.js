@@ -15,33 +15,45 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
 const mysql = __importStar(require("mysql"));
-// import config from "../db/mysql";
-const utlis_1 = require("../utlis");
-const config = {
-    host: "*****",
-    user: "*****",
-    password: "*****",
-    database: "*****" // 数据库名
-};
-const con = mysql.createConnection(config);
 const Route = express.Router();
-Route.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { content } = req.body;
-    const user = "xijia";
-    const con = mysql.createConnection(config);
-    const sql = `insert into feedback (user,ip,time,content) values ('${user}','${req.ip}','${new Date().getTime()}','${content}') `;
+const mysql_1 = __importDefault(require("../db/mysql"));
+const utlis_1 = require("../utlis");
+const jwt_1 = __importDefault(require("../jwt"));
+const jwt = new jwt_1.default();
+Route.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token } = req.query;
+    const con = mysql.createConnection(mysql_1.default);
+    const USERINFO = jwt.verifyToken(token);
+    console.log(USERINFO);
+    const sql = `select * from find_users where email='${USERINFO.email}'`;
     try {
         const result = yield utlis_1._query(con, sql);
         res.send({
             status: 0,
-            msg: "ok"
+            msg: "ok",
+            data: result
         });
     }
     catch (e) {
         console.log(e);
     }
+    // con.query(sql, (err, data) => {
+    //   if (err) {
+    //     console.log("查询失败");
+    //     return false;
+    //   }
+    //   res.send({
+    //     status: 0,
+    //     msg: "ok",
+    //     data: data
+    //   });
+    // });
+    // res.send("sd");
 }));
 exports.default = Route;

@@ -32,7 +32,8 @@ const jwt = new jwt_1.default();
 // control file store
 const storage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "/var/www/html/winsydeny.github.io/upload");
+        // cb(null, "/var/www/html/winsydeny.github.io/upload");
+        cb(null, "upload");
     },
     filename: (req, file, cb) => {
         const filename = crypto_1.default.createHash("md5");
@@ -58,11 +59,19 @@ Route.post("/", upload.any(), (req, res) => __awaiter(void 0, void 0, void 0, fu
     // }
     const con = mysql.createConnection(mysql_1.default);
     try {
-        // const rs = await _query(con, sql);
+        const rs = yield utlis_1._query(con, sql);
+        console.log(rs);
+        if (rs.affectedRows > 0) {
+            res.send({
+                status: 0,
+                msg: "upload success",
+                url: "/upload/" + req.files[0].filename
+            });
+            return false;
+        }
         res.send({
-            status: 0,
-            msg: "upload success",
-            url: req.files[0].path
+            status: 30001,
+            msg: "upload failed"
         });
     }
     catch (e) {
