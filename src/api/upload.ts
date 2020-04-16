@@ -12,8 +12,8 @@ const jwt = new Jwt();
 // control file store
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // cb(null, "/var/www/html/winsydeny.github.io/upload");
-    cb(null, "upload");
+    cb(null, "/var/www/html/winsydeny.github.io/upload");
+    // cb(null, "upload");
   },
   filename: (req, file, cb) => {
     const filename = crypto.createHash("md5");
