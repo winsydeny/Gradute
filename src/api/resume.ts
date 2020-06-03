@@ -22,7 +22,7 @@ function sendEmail(client: string, url: string) {
     to: client, // list of receivers
     subject: "Upload you resume", // Subject line
     text: "attachment", // plain text body
-    html: `<div><a herf='${url}'>click here to upload</a><p>${url}</p></div>`
+    html: `<div><a href='${url}'>click here to upload</a><p>${url}</p></div>`
   };
   return new Promise((resolve, reject) => {
     transporter.sendMail(emailMessage, (err, res) => {

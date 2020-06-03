@@ -94,14 +94,23 @@ Route.post("/personal", async (req: any, res: any) => {
   const { name, cellphone, email } = req.body;
   const con = mysql.createConnection(config);
   const sql = `update find_users set user='${name}',cellphone='${cellphone}' where email='${email}'`;
+  const find_info = `insert into find_user_info (email,cellphone) VALUE ('${email}','${cellphone}')`;
+
   const result: any = await _query(con, sql);
+  // const con2 = mysql.createConnection(config);
+
+  // const result_info: any = await _query(con2, find_info);
   if (result.affectedRows === 1) {
+    const con2 = mysql.createConnection(config);
+    const rs_info: any = await _query(con2, find_info);
+
     res.send({
       status: 0,
       msg: "ok"
     });
     return false;
   }
+
   res.send({
     status: -1,
     msg: "fail"
@@ -111,6 +120,8 @@ Route.post("/", (req: any, res: any) => {
   const { code, email, passcode } = req.body;
   const con = mysql.createConnection(config);
   const sql = `select * from find_register where code=${code} and email='${email}'`;
+  // const find_info = `insert into find_user_info (email) VALUE ('${email}')`;
+
   const uuid = uuidv1();
   const user: User = {
     uid: uuid,
@@ -135,9 +146,11 @@ Route.post("/", (req: any, res: any) => {
     con.query(addUser(user), (e, r) => {
       if (e) {
         console.log("err,add new user");
+        console.log(e);
         return false;
       }
     });
+
     res.send({
       status: 0,
       msg: "ok",

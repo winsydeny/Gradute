@@ -3,7 +3,7 @@ import * as mysql from "mysql";
 const connection = {
   host: "vanlansh.wang",
   user: "root",
-  password: "",
+  password: "jason455XIJIA.",
   database: "find"
 };
 export default connection;

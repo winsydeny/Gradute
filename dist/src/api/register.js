@@ -106,8 +106,13 @@ Route.post("/personal", (req, res) => __awaiter(void 0, void 0, void 0, function
     const { name, cellphone, email } = req.body;
     const con = mysql.createConnection(mysql_1.default);
     const sql = `update find_users set user='${name}',cellphone='${cellphone}' where email='${email}'`;
+    const find_info = `insert into find_user_info (email,cellphone) VALUE ('${email}','${cellphone}')`;
     const result = yield utlis_1._query(con, sql);
+    // const con2 = mysql.createConnection(config);
+    // const result_info: any = await _query(con2, find_info);
     if (result.affectedRows === 1) {
+        const con2 = mysql.createConnection(mysql_1.default);
+        const rs_info = yield utlis_1._query(con2, find_info);
         res.send({
             status: 0,
             msg: "ok"
@@ -123,6 +128,7 @@ Route.post("/", (req, res) => {
     const { code, email, passcode } = req.body;
     const con = mysql.createConnection(mysql_1.default);
     const sql = `select * from find_register where code=${code} and email='${email}'`;
+    // const find_info = `insert into find_user_info (email) VALUE ('${email}')`;
     const uuid = uuid_1.v1();
     const user = {
         uid: uuid,
@@ -147,6 +153,7 @@ Route.post("/", (req, res) => {
         con.query(addUser(user), (e, r) => {
             if (e) {
                 console.log("err,add new user");
+                console.log(e);
                 return false;
             }
         });

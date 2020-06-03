@@ -40,7 +40,7 @@ function sendEmail(client, url) {
         to: client,
         subject: "Upload you resume",
         text: "attachment",
-        html: `<div><a herf='${url}'>click here to upload</a><p>${url}</p></div>`
+        html: `<div><a href='${url}'>click here to upload</a><p>${url}</p></div>`
     };
     return new Promise((resolve, reject) => {
         transporter.sendMail(emailMessage, (err, res) => {

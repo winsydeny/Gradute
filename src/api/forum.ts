@@ -4,7 +4,7 @@ const Route: any = express.Router();
 import { User } from "../db/mongo";
 import config from "../db/mysql";
 import { _query } from "../utlis";
-import uuid from "uuid";
+import { v1 as uuidv1 } from "uuid";
 interface Request {
   body: RequestBody;
 }
@@ -18,7 +18,7 @@ interface RequestBody {
 Route.post("/", (req: any, res: any) => {
   const { email, user, avatar, content, thumb, comment, created } = req.body;
   const con = mysql.createConnection(config);
-  const sql = `insert into find_forum (email, user, avatar, content, thumb, comment, created) values ('${email}','${user}','${avatar}','${content}','${thumb}','${comment}','${created}')`;
+  const sql = `insert into find_forum (uid, email, user, avatar, content, thumb, comment, created) values ('${uuidv1()}','${email}','${user}','${avatar}','${content}','${thumb}','${comment}','${created}')`;
   try {
     const result: any = _query(con, sql);
     if (result.affectRows === 0) {

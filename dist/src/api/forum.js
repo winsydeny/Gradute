@@ -24,11 +24,12 @@ const mysql = __importStar(require("mysql"));
 const Route = express.Router();
 const mysql_1 = __importDefault(require("../db/mysql"));
 const utlis_1 = require("../utlis");
+const uuid_1 = require("uuid");
 // localhost:3000/api/forum
 Route.post("/", (req, res) => {
     const { email, user, avatar, content, thumb, comment, created } = req.body;
     const con = mysql.createConnection(mysql_1.default);
-    const sql = `insert into find_forum (email, user, avatar, content, thumb, comment, created) values ('${email}','${user}','${avatar}','${content}','${thumb}','${comment}','${created}')`;
+    const sql = `insert into find_forum (uid, email, user, avatar, content, thumb, comment, created) values ('${uuid_1.v1()}','${email}','${user}','${avatar}','${content}','${thumb}','${comment}','${created}')`;
     try {
         const result = utlis_1._query(con, sql);
         if (result.affectRows === 0) {
