@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 const cert = "FBsckdislkkklsiaow1343";
 export default class Jsonwebtoken {
-  generateToken() {
-    const token = jwt.sign({ username: "xijia" }, cert, {
+  generateToken(email: string) {
+    const token = jwt.sign({ email: email }, cert, {
       expiresIn: "10h"
     });
     return token;

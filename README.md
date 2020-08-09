@@ -45,3 +45,7 @@ var styles = {
 
 // ssh -T ubuntu@49.232.40.102 "/tmp/download.sh"
 ```
+
+### QAQ
+
+- nginx 反向代理的时候请求头里不能包含“\_”的属性，如果有会被 nginx 子动过滤

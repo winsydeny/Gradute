@@ -16,41 +16,44 @@ const mysql_1 = __importDefault(require("../db/mysql"));
 const jwt_1 = __importDefault(require("../jwt"));
 const jwt = new jwt_1.default();
 const Route = express.Router();
-// body 请求参数类型为 x-www-form-urlencoded / json（不支持form-data）
-Route.post("/", (req, res) => {
-    console.log(req.body);
-    const { email, passcode } = req.body;
-    const token = jwt.generateToken(email);
+// body 请求参数类型为 x-www-form-urlencoded（不支持form-data）
+/**
+ * 模糊查找（关键字，公司名称，职位名称）
+ * params:
+ *  {
+ *      keyword: String, 关键词
+ *      longitude: String, 经度
+ *      latitude: String, 纬度
+ *      filter: Array,  关键词过滤
+ *      page: Number [1], 第几页
+ *      size: Number [10] 每页数量
+ *  }
+ */
+Route.get("/", (req, res) => {
+    const size = req.query.size || 10;
+    const page = req.query.page || 1;
+    const start = (page - 1) * size; //start number
+    // console.log(req.query)
     const con = mysql.createConnection(mysql_1.default);
-    const sql = `select email,user from find_users where email='${email}' and passcode='${passcode}'`;
+    // limit ' + start + ',20'
+    // const sql: string =`select * from find_users limit ${start},${size}`;
+    // 通过关键词查找并且分页
+    const sql = `select * from find_joblist where position like '%${req.query.keyword}%' limit ${start},${size}`;
+    con.connect();
     con.query(sql, (err, data) => {
-        // console.log(data);
         if (err) {
-            console.log(err);
-            return false;
-        }
-        if (data.length === 1) {
             res.send({
-                status: 0,
-                access_token: token,
-                msg: "login success",
-                data: data
+                status: 10001,
+                msg: err
             });
             return false;
         }
         res.send({
-            status: 10009,
-            msg: "无此用户或者账号密码错误"
+            status: 0,
+            msg: "ok",
+            data: data
         });
-        con.end();
     });
-    // if (email && passcode) {
-    //   res.send({ status: 0, token: token, msg: "login success" });
-    //   return false;
-    // }
-    // res.send({
-    //   status: 0,
-    //   msg: "user and passcode is must be required"
-    // });
+    con.end();
 });
 exports.default = Route;

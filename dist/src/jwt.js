@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const cert = "FBsckdislkkklsiaow1343";
 class Jsonwebtoken {
-    generateToken() {
-        const token = jsonwebtoken_1.default.sign({ username: "xijia" }, cert, {
+    generateToken(email) {
+        const token = jsonwebtoken_1.default.sign({ email: email }, cert, {
             expiresIn: "10h"
         });
         return token;

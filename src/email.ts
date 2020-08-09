@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 async function main() {
   //创建一个smtp服务
   let testAccount = await nodemailer.createTestAccount();

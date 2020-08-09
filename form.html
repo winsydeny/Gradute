@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    .btn {
+      line-height: 20px;
+      outline: none;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form input {
+      outline: none;
+      font-size: 18px;
+      /* height: 30px;
+      background: red; */
+    }
+  </style>
+</head>
+
+<body style="display: flex;justify-content: center;background: skyblue;">
+  <div>
+    <form action="https://www.vanlansh.wang/api/upload/attach" method="post" enctype="multipart/form-data">
+      <h2>简历上传</h2>
+      <input class="btn" type="file" name="logo">
+      <input class="btn" type="submit" value="点击上传">
+    </form>
+  </div>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- <lottie-player src="https://assets5.lottiefiles.com/datafiles/m4ER8LPQYNzRwyO/data.json" background="transparent"
+    speed="1" style="width: 300px; height: 300px;" loop controls autoplay>
+  </lottie-player> -->
+  <script>
+    const t = window.location.href.split("?")[1].split("=")[1]
+    const f = document.querySelector('form');
+    f.action += '?token=' + t;
+  </script>
+</body>
+
+</html>
